@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Autenticação Facial</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <div class="interface-principal">
+
+            <div class="camera-box">
+                <h1>Autenticação Facial</h1>
+                <video id="video" autoplay playsinline></video>
+                <p id="resultado"></p>
+                <button id="botaoTeste" onclick="verificarRosto()" style="display:none;">Verificar Rosto</button>
+            </div>
+
+            <div class="instrucoes-box">
+                <h2>📋 Instruções para Reconhecimento</h2>
+                <ul>
+                    <li>🟢 Mantenha o rosto centralizado na câmera.</li>
+                    <li>💡 Esteja em um ambiente bem iluminado, sem luz forte atrás de você.</li>
+                    <li>😐 Mantenha uma expressão neutra, sem exageros.</li>
+                    <li>🧢 Evite óculos escuros, máscaras ou bonés que cubram o rosto.</li>
+                    <li>📏 Fique a uma distância média — nem muito perto, nem muito longe.</li>
+                    <li>📱 Evite movimentar o rosto durante a verificação.</li>
+                </ul>
+            </div>
+
+            <div class="acoes-box">
+                <a href="/seguranca-relatorios" class="botao-relatorio">📊 Relatórios</a>
+                <a href="/seguranca" class="cadastro-link">📝 Cadastrar</a>
+            </div>
+        
+    </div>
+
+    <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+
+    <script>
+        let bloqueado = false;
+        let reconhecido = false;
+        let stream;
+
+        window.onload = () => {
+            const video = document.getElementById('video');
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(s => {
+                    stream = s;
+                    video.srcObject = stream;
+                    document.getElementById('botaoTeste').style.display = 'inline-block';
+                })
+                .catch(err => {
+                    document.getElementById('resultado').innerText = "Erro ao acessar a câmera.";
+                    console.error("Erro na webcam:", err);
+                });
+        };
+
+        function verificarRosto() {
+            if (bloqueado || reconhecido) return;
+
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+
+            if (!video || !canvas || !context) return;
+
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imagem = canvas.toDataURL('image/png');
+
+            fetch('/verificar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ imagem })
+            })
+            .then(res => res.json())
+            .then(data => {
+                const resultado = document.getElementById('resultado');
+
+                if (data.redirect) {
+                    reconhecido = true;
+                    if (stream) stream.getTracks().forEach(track => track.stop());
+                    window.location.href = data.redirect;
+                }
+
+                if (data.mensagem) {
+                    resultado.className = 'erro';
+                    resultado.innerText = data.mensagem;
+                    resultado.style.display = 'block';
+                    bloqueado = true;
+
+                    setTimeout(() => {
+                        bloqueado = false;
+                        resultado.innerText = '';
+                        resultado.className = '';
+                        resultado.style.display = 'none';
+                    }, 10000);
+                }
+            })
+            .catch(err => {
+                const resultado = document.getElementById('resultado');
+                resultado.className = 'erro';
+                resultado.innerText = "Erro na verificação.";
+                resultado.style.display = 'block';
+                console.error("Erro na verificação:", err);
+
+                setTimeout(() => {
+                    resultado.innerText = '';
+                    resultado.className = '';
+                    resultado.style.display = 'none';
+                }, 10000);
+            });
+        }
+    </script>
+</body>
+</html>

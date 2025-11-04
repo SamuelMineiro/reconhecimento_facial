@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Acesso Autorizado</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <div class="interface-principal">
+        <!-- Card do Funcionário -->
+        <div class="card">
+            <img src="{{ url_for('static', filename='imagens/' + imagem|safe) }}" alt="Foto do Funcionário">
+            <h2>{{ nome }}</h2>
+            <p><strong>Cargo:</strong> {{ cargo }}</p>
+            <p><strong>Nível:</strong> {{ nivel }}</p>
+            <div class="voltar">
+                <a href="/">← Voltar</a>
+            </div>
+        </div>
+
+        <!-- Conteúdo das Toxinas -->
+        <div class="conteudo">
+            {% if toxinas %}
+            <table class="tabela-toxinas">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Descrição</th>
+                        <th>Fonte</th>
+                        <th>Efeitos à Saúde</th>
+                        <th>Via de Exposição</th>
+                        <th>Quantidade</th>
+                        <th>Nível de Toxicidade</th>
+                        <th>Estado Físico</th>
+                        <th>Data de Registro</th>
+                        <th>Nível de Acesso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for toxina in toxinas %}
+                    <tr>
+                        <td>{{ toxina.nome }}</td>
+                        <td>{{ toxina.tipo }}</td>
+                        <td>{{ toxina.descricao }}</td>
+                        <td>{{ toxina.fonte }}</td>
+                        <td>{{ toxina.efeitos_saude }}</td>
+                        <td>{{ toxina.via_exposicao }}</td>
+                        <td>{{ toxina.quantidade }}</td>
+                        <td>{{ toxina.nivel_toxicidade }}</td>
+                        <td>{{ toxina.estado_fisico }}</td>
+                        <td>{{ toxina.data_registro }}</td>
+                        <td>{{ toxina.nivel_acesso }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p style="color: #00d4ff; font-weight: bold;">Nenhuma toxina disponível para este nível de acesso.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

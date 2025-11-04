@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Funcionário</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <div class="editar-container">
+        <div class="form-box">
+            <h2>Editar Funcionário</h2>
+            <form method="POST" enctype="multipart/form-data">
+                <label>Nome:</label>
+                <input type="text" name="nome" value="{{ funcionario[0] }}" style="text-transform:uppercase;" required>
+
+                <label>Cargo:</label>
+                <input type="text" name="cargo" value="{{ funcionario[1] }}" required>
+
+                <label>Nível de Acesso:</label>
+                <select name="nivel" required>
+                    <option value="Nivel 1: acesso geral" {% if funcionario[2] == 'Nivel 1: acesso geral' %}selected{% endif %}>Nivel 1: acesso geral</option>
+                    <option value="Nivel 2: diretores de divisões" {% if funcionario[2] == 'Nivel 2: diretores de divisões' %}selected{% endif %}>Nivel 2: diretores de divisões</option>
+                    <option value="Nivel 3: ministro do meio ambiente" {% if funcionario[2] == 'Nivel 3: ministro do meio ambiente' %}selected{% endif %}>Nivel 3: ministro do meio ambiente</option>
+                </select>
+
+                <label>Nova Imagem (opcional):</label>
+                <input type="file" name="imagem" accept="image/*">
+
+                <button type="submit">Salvar Alterações</button>
+            </form>
+            <div class="voltar">
+                <a href="/cadastro">← Voltar para Cadastro</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

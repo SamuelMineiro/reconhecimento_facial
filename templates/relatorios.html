@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatórios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Relatórios do Sistema</h1>
+
+        <div class="metric"><span>Total de Usuários:</span> <strong>{{ total_usuarios }}</strong></div>
+        <div class="metric"><span>Total de Tentativas de Acesso:</span> <strong>{{ total_tentativas }}</strong></div>
+        <div class="metric"><span>Sucessos:</span> <strong>{{ tentativas_sucesso }}</strong></div>
+        <div class="metric"><span>Falhas:</span> <strong>{{ tentativas_falha }}</strong></div>
+
+        <div class="section-title">Distribuição por Nível de Acesso</div>
+        <div class="metric"><span>Nível 1 (acesso geral):</span> <strong>{{ nivel1 }}</strong></div>
+        <div class="metric"><span>Nível 2 (diretores):</span> <strong>{{ nivel2 }}</strong></div>
+        <div class="metric"><span>Nível 3 (ministro):</span> <strong>{{ nivel3 }}</strong></div>
+
+        <div class="section-title">Últimas Tentativas de Acesso</div>
+        <table>
+            <tr>
+                <th>Data/Hora</th>
+                <th>Status</th>
+                <th>Funcionário</th>
+                <th>Nível</th>
+            </tr>
+            {% for acesso in ultimos_acessos %}
+            <tr>
+                <td>{{ acesso[0] }}</td>
+                <td>{{ '✅ Sucesso' if acesso[1] == 1 else '❌ Falha' }}</td>
+                <td>{{ acesso[2] if acesso[2] else 'Desconhecido' }}</td>
+                <td>{{ acesso[3] if acesso[3] else '-' }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="voltar">
+            <a href="/">← Voltar para Autenticação</a>
+        </div>
+    </div>
+</body>
+</html>

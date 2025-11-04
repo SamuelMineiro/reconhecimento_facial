@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Verificação de Segurança - Relatórios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <div class="login-box">
+        <h1>Área Restrita - Relatórios</h1>
+        <form method="POST">
+            <input type="text" name="usuario" placeholder="Usuário" required>
+            <input type="password" name="senha" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+        </form>
+        {% if erro %}
+            <p id="resultado" class="erro">{{ erro }}</p>
+        {% endif %}
+        <div class="voltar">
+            <a href="/">← Voltar</a>
+        </div>
+    </div>
+</body>
+</html>

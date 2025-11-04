@@ -1,0 +1,403 @@
+/* === RESET E BASE === */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    display: block;
+}
+
+.card {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 250px;
+    padding: 20px;
+    background-color: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    text-align: center;
+    z-index: 10;
+}
+
+/* === cadastro === */
+.cadastro-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    padding: 40px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.cadastro-container .form-box,
+.cadastro-container .lista-box {
+    flex: 1 1 400px;
+    max-width: 400px;
+    background-color: rgba(255,255,255,0.05);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+/* tela editar */
+.editar-container {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.editar-container .form-box {
+    max-width: 400px;
+    width: 100%;
+    background-color: rgba(255,255,255,0.05);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+/* Botões de ação */
+.lista-box .acoes {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.lista-box .acoes button {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.lista-box .acoes button:hover {
+    background-color: #0056b3;
+}
+
+.lista-box a {
+    color: #00d4ff;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 0 8px;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.lista-box a:hover {
+    color: #66e0ff;
+    text-decoration: underline;
+}
+
+/* === CONTAINERS GERAIS === */
+.container,
+.card,
+.camera-box,
+.instrucoes-box,
+.toxina-box {
+    background-color: rgba(255,255,255,0.05);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+/* === TÍTULOS === */
+h1, h2, h3 {
+    color: #00d4ff;
+    margin-bottom: 20px;
+}
+
+/* === FORMULÁRIOS === */
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background-color: #fff;
+    color: #000;
+}
+
+/* === BOTÕES === */
+button,
+.cadastro-link,
+.botao-relatorio,
+.relatorio-link,
+.acoes-box a {
+    padding: 12px 20px;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+button:hover,
+.cadastro-link:hover,
+.botao-relatorio:hover,
+.relatorio-link:hover,
+.acoes-box a:hover {
+    background-color: #0056b3;
+}
+
+/* === POSICIONAMENTO DE BOTÕES FIXOS (se usados em telas específicas) */
+.cadastro-link {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.botao-relatorio {
+    position: absolute;
+    bottom: 70px;
+    right: 20px;
+}
+
+/* === TABELAS === */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background-color: rgba(255,255,255,0.1);
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #444;
+    text-align: left;
+    color: #fff;
+}
+
+th {
+    background-color: rgba(0,212,255,0.2);
+}
+
+tr:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+/* === ALERTAS E MENSAGENS === */
+.erro,
+#resultado,
+#resultado.erro {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 0, 0, 0.9);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 9999;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    animation: fadeInOut 10s ease forwards;
+    display: none;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    90% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}
+
+/* === CÂMERA E INSTRUÇÕES === */
+.camera-instrucoes,
+.interface-principal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    margin: 0 auto;
+    padding-top: 20px;
+    max-width: 1200px;
+    align-items: flex-start;
+}
+
+.camera-box {
+    flex: 1 1 600px;
+}
+
+.instrucoes-box {
+    flex: 1 1 400px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.instrucoes-box ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.instrucoes-box li {
+    margin-bottom: 12px;
+}
+
+/* === VÍDEO === */
+video {
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    width: 100%;
+    max-width: 640px;
+    height: auto;
+}
+
+/* === BOTÃO DE VERIFICAÇÃO === */
+#botaoTeste {
+    margin-top: 20px;
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#botaoTeste:hover {
+    background-color: #0056b3;
+}
+
+/* === CARD DO FUNCIONÁRIO === */
+.topo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
+.card {
+    width: 250px;
+    padding: 20px;
+}
+
+.card img {
+    width: 120px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    object-fit: cover;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+}
+
+.card h2 {
+    margin: 5px 0;
+    font-size: 18px;
+}
+
+.card p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+/* === VOLTAR === */
+.voltar a {
+    text-decoration: none;
+    color: #00d4ff;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* === CONTEÚDO DE TOXINAS === */
+.conteudo {
+    margin-top: 40px;
+    padding-left: 300px;
+    width: calc(100% - 320px);
+}
+
+.toxina-box {
+    margin-bottom: 20px;
+}
+
+.toxina-box p {
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 60px;
+    padding: 40px 20px;
+}
+
+.metric {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.section-title {
+    margin-top: 40px;
+    font-size: 22px;
+    color: #00d4ff;
+    border-bottom: 1px solid #00d4ff;
+    padding-bottom: 5px;
+}
+
+/* === TABELA DE TOXINAS === */
+.tabela-toxinas {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: rgba(255,255,255,0.03);
+    color: #fff;
+    font-size: 14px;
+}
+
+.tabela-toxinas th,
+.tabela-toxinas td {
+    border: 1px solid #00d4ff;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.tabela-toxinas th {
+    background-color: #003b5c;
+    color: #00d4ff;
+}
+
+.tabela-toxinas tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* === FORMULÁRIO DE LOGIN COMPACTO === */
+.login-box {
+    background-color: rgba(255,255,255,0.05);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    max-width: 400px;
+    width: 100%;
+    margin: 60px auto;
+    text-align: center;
+}
+
+body {
+    background-attachment: fixed;
+}
+

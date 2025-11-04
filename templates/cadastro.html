@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Funcionário</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <div class="cadastro-container">
+        <!-- Formulário de cadastro -->
+        <div class="form-box">
+            <h2>Cadastro de Funcionário</h2>
+            <form method="POST" enctype="multipart/form-data">
+                <label>Nome:</label>
+                <input type="text" name="nome" style="text-transform:uppercase;" required>
+
+                <label>Cargo:</label>
+                <input type="text" name="cargo" required>
+
+                <label>Nível de Acesso:</label>
+                <select name="nivel" required>
+                    <option value="Nivel 1: acesso geral">Nivel 1: acesso geral</option>
+                    <option value="Nivel 2: diretores de divisões">Nivel 2: diretores de divisões</option>
+                    <option value="Nivel 3: ministro do meio ambiente">Nivel 3: ministro do meio ambiente</option>
+                </select>
+
+                <label>Imagem (PNG ou JPG):</label>
+                <input type="file" name="imagem" accept="image/*" required>
+
+                <button type="submit">Cadastrar</button>
+            </form>
+            <div class="voltar">
+                <a href="/">← Voltar para Autenticação</a>
+            </div>
+        </div>
+
+        <!-- Lista de funcionários -->
+        <div class="lista-box">
+            <h2>Funcionários Cadastrados</h2>
+            <ul>
+                {% for f in funcionarios %}
+                    <li>
+                        <strong>{{ f[1] }}</strong>
+                        — {{ f[2] }} — {{ f[3] }}<br>
+                        <a href="/editar/{{ f[0] }}">✏️ Editar</a>
+                        <a href="/excluir/{{ f[0] }}" onclick="return confirm('Excluir {{ f[1] }}?')">🗑️ Excluir</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
