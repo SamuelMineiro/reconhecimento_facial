@@ -401,3 +401,22 @@ body {
     background-attachment: fixed;
 }
 
+/* erro e sucesso */
+.mensagens {
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.erro_ministro {
+    color: #fff;
+    background-color: #e74c3c;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.sucesso {
+    color: #fff;
+    background-color: #2ecc71;
+    padding: 8px;
+    border-radius: 4px;
+}

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, jsonify, url_for
+from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
 import sqlite3, os, base64
 from PIL import Image
 from io import BytesIO
@@ -11,6 +11,7 @@ import re
 
 
 app = Flask(__name__)
+app.secret_key = 's3cr3t@Samuel_2025#FlaskApp'
 app.config['UPLOAD_FOLDER'] = 'static/imagens'
 
 # Rota principal
@@ -188,9 +189,18 @@ def cadastro():
         filename = secure_filename(imagem.filename)
         imagem.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
+        if nivel == "Nivel 3: ministro do meio ambiente":
+            cursor.execute('SELECT COUNT(*) FROM funcionarios WHERE nivel_acesso = ?', (nivel,))
+            existe_ministro = cursor.fetchone()[0] > 0
+            if existe_ministro:
+                conn.close()
+                flash("Já existe um Ministro cadastrado. Não é possível adicionar outro usuário com nível 3.", "erro_ministro")
+                return redirect('/cadastro')
+
         cursor.execute('INSERT INTO funcionarios (nome, cargo, nivel_acesso, imagem) VALUES (?, ?, ?, ?)',
                        (nome, cargo, nivel, filename))
         conn.commit()
+        flash("Funcionário cadastrado com sucesso!", "sucesso")
 
     cursor.execute('SELECT id, nome, cargo, nivel_acesso FROM funcionarios')
     funcionarios = cursor.fetchall()
