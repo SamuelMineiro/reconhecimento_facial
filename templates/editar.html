@@ -9,6 +9,15 @@
     <div class="editar-container">
         <div class="form-box">
             <h2>Editar Funcionário</h2>
+            {% with mensagens = get_flashed_messages(with_categories=true) %}
+                {% if mensagens %}
+                    <div class="mensagens">
+                    {% for categoria, msg in mensagens %}
+                        <p class="{{ categoria }}">{{ msg }}</p>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
             <form method="POST" enctype="multipart/form-data">
                 <label>Nome:</label>
                 <input type="text" name="nome" value="{{ funcionario[0] }}" style="text-transform:uppercase;" required>

@@ -220,6 +220,14 @@ def editar(id):
         nivel = request.form['nivel']
         imagem = request.files.get('imagem')
 
+        if nivel == "Nivel 3: ministro do meio ambiente":
+            cursor.execute('SELECT id FROM funcionarios WHERE nivel_acesso = ?', (nivel,))
+            ministro_existente = cursor.fetchone()
+            if ministro_existente and ministro_existente[0] != id:
+                conn.close()
+                flash("Já existe um Ministro cadastrado. Não é possível promover outro funcionário para nível 3.", "erro_ministro")
+                return redirect(f'/editar/{id}')
+
         if imagem and imagem.filename != '':
             filename = secure_filename(imagem.filename)
             imagem.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
