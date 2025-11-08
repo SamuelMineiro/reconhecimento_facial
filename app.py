@@ -142,7 +142,7 @@ def acesso(nome, cargo, nivel, imagem):
     # Consulta filtrada
     query = f"""
         SELECT nome, tipo, descricao, fonte, efeitos_saude, via_exposicao,
-               quantidade, nivel_toxicidade, estado_fisico, data_registro, nivel_acesso
+               quantidade, estado_fisico, data_registro, nivel_acesso
         FROM toxinas
         WHERE nivel_acesso IN ({','.join(['?'] * len(niveis_permitidos))})
     """
@@ -161,10 +161,9 @@ def acesso(nome, cargo, nivel, imagem):
             'efeitos_saude': r[4],
             'via_exposicao': r[5],
             'quantidade': r[6],
-            'nivel_toxicidade': r[7],
-            'estado_fisico': r[8],
-            'data_registro': r[9],
-            'nivel_acesso': r[10]
+            'estado_fisico': r[7],
+            'data_registro': r[8],
+            'nivel_acesso': r[9]
         })
 
     return render_template('acesso.html',
