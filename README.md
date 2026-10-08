@@ -119,8 +119,7 @@ Espaço necessário: ~19 GB
 - Três níveis hierárquicos: Geral, Gerente, Ministro  
 
 ### 🛡 Administradores
-- Login: `admin`  
-- Senha: `1234`  
+
 - Cadastro e edição de funcionários  
 - Relatórios de acesso  
 - Auditoria do sistema  
