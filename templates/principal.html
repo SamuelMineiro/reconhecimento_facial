@@ -10,9 +10,21 @@
 
             <div class="camera-box">
                 <h1>Autenticação Facial</h1>
-                <video id="video" autoplay playsinline></video>
+                <div class="video-container">
+                    <video id="video" autoplay playsinline></video>
+                    <div id="scanner" class="scanner-laser" style="display:none;"></div>
+                    <div id="overlayAnalise" class="overlay-analise" style="display:none;">
+                        <div class="spinner-analise"></div>
+                        <div class="texto-analise-box">
+                            <span class="texto-analise">Analisando rosto...</span>
+                            <span class="subtexto-analise">Processando dados biométricos</span>
+                        </div>
+                    </div>
+                </div>
                 <p id="resultado"></p>
-                <button id="botaoTeste" onclick="verificarRosto()" style="display:none;">Verificar Rosto</button>
+                <button id="botaoTeste" onclick="verificarRosto()" style="display:none;">
+                    <span id="botaoTexto">Verificar Rosto</span>
+                </button>
             </div>
 
             <div class="instrucoes-box">
@@ -48,23 +60,83 @@
                 .then(s => {
                     stream = s;
                     video.srcObject = stream;
-                    document.getElementById('botaoTeste').style.display = 'inline-block';
+                    document.getElementById('botaoTeste').style.display = 'inline-flex';
                 })
                 .catch(err => {
-                    document.getElementById('resultado').innerText = "Erro ao acessar a câmera.";
+                    const resultado = document.getElementById('resultado');
+                    resultado.className = 'erro';
+                    resultado.innerText = "Erro ao acessar a câmera. Verifique as permissões do navegador.";
+                    resultado.style.display = 'block';
                     console.error("Erro na webcam:", err);
                 });
         };
+
+        function setEstadoAnalise(ativo) {
+            const botao = document.getElementById('botaoTeste');
+            const botaoTexto = document.getElementById('botaoTexto');
+            const scanner = document.getElementById('scanner');
+            const overlay = document.getElementById('overlayAnalise');
+
+            if (ativo) {
+                bloqueado = true;
+                if (botao) {
+                    botao.disabled = true;
+                }
+                if (botaoTexto) {
+                    botaoTexto.innerHTML = '<span class="spinner-btn"></span> Analisando rosto...';
+                }
+                if (scanner) {
+                    scanner.style.display = 'block';
+                }
+                if (overlay) {
+                    overlay.classList.remove('sucesso');
+                    overlay.innerHTML = `
+                        <div class="spinner-analise"></div>
+                        <div class="texto-analise-box">
+                            <span class="texto-analise">Analisando rosto...</span>
+                            <span class="subtexto-analise">Processando dados biométricos</span>
+                        </div>
+                    `;
+                    overlay.style.display = 'flex';
+                }
+            } else {
+                bloqueado = false;
+                if (botao) {
+                    botao.disabled = false;
+                }
+                if (botaoTexto) {
+                    botaoTexto.innerHTML = 'Verificar Rosto';
+                }
+                if (scanner) {
+                    scanner.style.display = 'none';
+                }
+                if (overlay) {
+                    overlay.style.display = 'none';
+                }
+            }
+        }
 
         function verificarRosto() {
             if (bloqueado || reconhecido) return;
 
             const video = document.getElementById('video');
             const canvas = document.getElementById('canvas');
+            const resultado = document.getElementById('resultado');
+
+            if (!video || !canvas) return;
+
             const context = canvas.getContext('2d');
+            if (!context) return;
 
-            if (!video || !canvas || !context) return;
+            // Oculta alertas prévios
+            resultado.style.display = 'none';
+            resultado.innerText = '';
+            resultado.className = '';
 
+            // Ativa o estado visual de análise imediatamente para evitar sensação de travamento
+            setEstadoAnalise(true);
+
+            // Captura o quadro atual
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             const imagem = canvas.toDataURL('image/png');
 
@@ -75,13 +147,39 @@
             })
             .then(res => res.json())
             .then(data => {
-                const resultado = document.getElementById('resultado');
-
                 if (data.redirect) {
                     reconhecido = true;
-                    if (stream) stream.getTracks().forEach(track => track.stop());
-                    window.location.href = data.redirect;
+                    const overlay = document.getElementById('overlayAnalise');
+                    const botaoTexto = document.getElementById('botaoTexto');
+
+                    if (overlay) {
+                        overlay.classList.add('sucesso');
+                        overlay.innerHTML = `
+                            <span style="font-size: 22px;">✅</span>
+                            <div class="texto-analise-box">
+                                <span class="texto-sucesso">Rosto reconhecido!</span>
+                                <span class="subtexto-analise">Liberando acesso...</span>
+                            </div>
+                        `;
+                    }
+
+                    if (botaoTexto) {
+                        botaoTexto.innerText = '✅ Acesso Liberado';
+                    }
+
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+
+                    // Breve transição para o usuário visualizar o sucesso da validação
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 800);
+                    return;
                 }
+
+                // Se não redirecionou, desativa o estado de análise e exibe a mensagem
+                setEstadoAnalise(false);
 
                 if (data.mensagem) {
                     resultado.className = 'erro';
@@ -94,21 +192,23 @@
                         resultado.innerText = '';
                         resultado.className = '';
                         resultado.style.display = 'none';
-                    }, 10000);
+                    }, 4000);
                 }
             })
             .catch(err => {
-                const resultado = document.getElementById('resultado');
+                setEstadoAnalise(false);
                 resultado.className = 'erro';
-                resultado.innerText = "Erro na verificação.";
+                resultado.innerText = "Erro na verificação. Tente novamente.";
                 resultado.style.display = 'block';
                 console.error("Erro na verificação:", err);
 
+                bloqueado = true;
                 setTimeout(() => {
+                    bloqueado = false;
                     resultado.innerText = '';
                     resultado.className = '';
                     resultado.style.display = 'none';
-                }, 10000);
+                }, 4000);
             });
         }
     </script>
