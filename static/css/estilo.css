@@ -197,28 +197,44 @@ tr:hover {
 
 /* === ALERTAS E MENSAGENS === */
 .erro,
-#resultado,
 #resultado.erro {
     position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgba(255, 0, 0, 0.9);
+    background-color: rgba(220, 53, 69, 0.95);
     color: #fff;
-    padding: 12px 20px;
+    padding: 12px 24px;
     border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
     z-index: 9999;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
-    animation: fadeInOut 10s ease forwards;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    animation: fadeInOut 5s ease forwards;
+    display: none;
+}
+
+#resultado.sucesso {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(40, 167, 69, 0.95);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 9999;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    animation: fadeInOut 5s ease forwards;
     display: none;
 }
 
 @keyframes fadeInOut {
     0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
-    90% { opacity: 1; }
+    15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    85% { opacity: 1; transform: translateX(-50%) translateY(0); }
     100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
 }
 
@@ -254,30 +270,150 @@ tr:hover {
     margin-bottom: 12px;
 }
 
-/* === VÍDEO === */
+/* === VÍDEO E EFEITOS DE ESCANEAMENTO === */
+.video-container {
+    position: relative;
+    display: inline-block;
+    max-width: 640px;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+    background-color: #000;
+}
+
+.video-container video,
 video {
     border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.4);
     width: 100%;
     max-width: 640px;
     height: auto;
+    display: block;
+    transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+}
+
+/* Linha de laser para escaneamento facial */
+.scanner-laser {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent 0%, #00d4ff 50%, transparent 100%);
+    box-shadow: 0 0 15px #00d4ff, 0 0 25px #00d4ff;
+    z-index: 4;
+    pointer-events: none;
+    animation: scanLaser 1.6s ease-in-out infinite;
+}
+
+@keyframes scanLaser {
+    0% { top: 4%; opacity: 0.4; }
+    50% { top: 94%; opacity: 1; }
+    100% { top: 4%; opacity: 0.4; }
+}
+
+/* Overlay com mensagem de análise facial */
+.overlay-analise {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 32, 39, 0.92);
+    border: 1px solid #00d4ff;
+    border-radius: 30px;
+    padding: 10px 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 5;
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+}
+
+.overlay-analise.sucesso {
+    border-color: #2ecc71;
+    box-shadow: 0 4px 20px rgba(46, 204, 113, 0.4);
+}
+
+.spinner-analise {
+    width: 22px;
+    height: 22px;
+    border: 3px solid rgba(0, 212, 255, 0.2);
+    border-top-color: #00d4ff;
+    border-radius: 50%;
+    animation: girar 0.8s linear infinite;
+    flex-shrink: 0;
+}
+
+.texto-analise-box {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.texto-analise {
+    font-size: 14px;
+    font-weight: bold;
+    color: #00d4ff;
+    margin: 0;
+}
+
+.subtexto-analise {
+    font-size: 11px;
+    color: #d1d5db;
+    margin: 0;
+}
+
+.texto-sucesso {
+    font-size: 14px;
+    font-weight: bold;
+    color: #2ecc71;
+    margin: 0;
+}
+
+@keyframes girar {
+    to { transform: rotate(360deg); }
 }
 
 /* === BOTÃO DE VERIFICAÇÃO === */
 #botaoTeste {
     margin-top: 20px;
-    padding: 12px 20px;
+    padding: 12px 24px;
     font-size: 16px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
-#botaoTeste:hover {
+#botaoTeste:hover:not(:disabled) {
     background-color: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+#botaoTeste:disabled {
+    background-color: #0056b3;
+    opacity: 0.8;
+    cursor: wait;
+    transform: none;
+}
+
+.spinner-btn {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: girar 0.8s linear infinite;
 }
 
 /* === CARD DO FUNCIONÁRIO === */
